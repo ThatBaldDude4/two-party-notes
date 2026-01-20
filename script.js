@@ -19,6 +19,9 @@ function render(state) {
     if (state.view === "list") {
         renderList(state.notes);
     }
+    if (state.view === "create") {
+        renderCreateNote()
+    }
 }
 
 function renderList(notes) {
@@ -45,7 +48,7 @@ function renderCreateNote() {
         <label for="title">Title:</label>
         <input name="title">
         <label for="description">Description:</label>
-        <input name="description>
+        <input name="description">
         <button type="submit">Save Note</button>
     </div>
     `;
@@ -53,7 +56,15 @@ function renderCreateNote() {
     appDisplayContainer.innerHTML = newNotesForm;
 }
 
+function saveNote() {
+    const title = document.querySelector('input[name="title"]').value;
+    const description = document.querySelector('input[name="description"]').value;
 
+    if (!title || !description) {return};
+
+    let note = new Note(title, description);
+    state.notes.push(note);
+}
 
 
 let note1 = new Note("Title", "This is description");
@@ -64,4 +75,5 @@ state.notes.push(note1);
 state.notes.push(note2);
 state.notes.push(note3);
 
+state.view = "create"
 render(state)
