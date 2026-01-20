@@ -39,12 +39,31 @@ function addNote(title, note, users) {
   allNotesArr.push(noteObject);
 }
 
+function displayNoteForm() {
+    console.log("Inside displayNoteForm()")
+    const form = 
+    `
+    <label for="title">Title:</label>
+    <input id="title" name="title">
+
+    <label for="description">Note:</label>
+    <input id="description" name="description">
+
+    <label for="users">Users:</label>
+    <input id="users" name="users">
+
+    <button type="submit" id="submit-note-btn">Submit Note</button>
+    `;
+
+    appDisplay.innerHTML = form;
+}
+
 function emptyNotes() {
   appDisplay.innerHTML = "";
 }
 
 function renderNotes(dataArr) {
-  let parsedDataStr = `<button type="text" id="add-note">Add Note</button>`;
+  let parsedDataStr = ``;
   dataArr.forEach((noteData) => {
     let parsedData = fillNote(noteData);
     console.log(parsedData)
@@ -52,6 +71,12 @@ function renderNotes(dataArr) {
   })
   appDisplay.innerHTML = parsedDataStr;
 }
+
+addNoteBtn.addEventListener("click", () => {
+    console.log("event fired")
+    emptyNotes();
+    displayNoteForm();
+})
 
 let note5 = new NoteCard("this is title", "testing this", [1])
 let note2 = new NoteCard("this is title", "testing this", [1])
