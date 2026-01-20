@@ -38,6 +38,21 @@ function renderList(notes) {
     appDisplayContainer.innerHTML = convertedNotes;
 }
 
+function renderCreateNote() {
+    let newNotesForm = 
+    `
+    <div class="form">
+        <label for="title">Title:</label>
+        <input name="title">
+        <label for="description">Description:</label>
+        <input name="description>
+        <button type="submit">Save Note</button>
+    </div>
+    `;
+
+    appDisplayContainer.innerHTML = newNotesForm;
+}
+
 
 
 
@@ -49,4 +64,4 @@ state.notes.push(note1);
 state.notes.push(note2);
 state.notes.push(note3);
 
-renderList(state.notes); 
+render(state)
