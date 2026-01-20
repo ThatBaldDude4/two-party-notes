@@ -1,5 +1,6 @@
 const fullAppContainer = document.getElementById("app-container");
 const appDisplayContainer = document.getElementById("app-display");
+const addNoteBtn = document.getElementById("add-note");
 
 class Note {
     constructor(title, noteDes) {
@@ -20,7 +21,7 @@ function render(state) {
         renderList(state.notes);
     }
     if (state.view === "create") {
-        renderCreateNote()
+        renderCreate()
     }
 }
 
@@ -34,6 +35,7 @@ function renderList(notes) {
             <h2 class="note-title">${title}</h2>
             <p class="note-description">${noteDescription}</p>
             <div class="time-created">${createdAt}</div>
+            <button class="edit-btn">EDIT</button>
         </div>
         `
     });
@@ -41,7 +43,7 @@ function renderList(notes) {
     appDisplayContainer.innerHTML = convertedNotes;
 }
 
-function renderCreateNote() {
+function renderCreate() {
     let newNotesForm = 
     `
     <div class="form">
@@ -49,7 +51,7 @@ function renderCreateNote() {
         <input name="title">
         <label for="description">Description:</label>
         <input name="description">
-        <button type="submit">Save Note</button>
+        <button type="submit" id="save-note-btn">Save Note</button>
     </div>
     `;
 
@@ -57,8 +59,11 @@ function renderCreateNote() {
 }
 
 function saveNote() {
-    const title = document.querySelector('input[name="title"]').value;
-    const description = document.querySelector('input[name="description"]').value;
+    let title = document.querySelector('input[name="title"]');
+    console.log("This is log", title)
+    title = title.value;
+    let description = document.querySelector('input[name="description"]');
+    description = description.value;
 
     if (!title || !description) {return};
 
@@ -66,14 +71,17 @@ function saveNote() {
     state.notes.push(note);
 }
 
+addNoteBtn.addEventListener("click", () => {
+    state.view = "create"
+    render(state)
 
-let note1 = new Note("Title", "This is description");
-let note2 = new Note("Title", "This is description");
-let note3 = new Note("Title", "This is description");
+});
 
-state.notes.push(note1);
-state.notes.push(note2);
-state.notes.push(note3);
-
-state.view = "create"
-render(state)
+document.addEventListener("click", (e) => {
+    if (e.target && e.target.id === "save-note-btn") {
+        saveNote();
+        state.view = "list";
+        render(state);
+        console.log(state.view)
+    }
+})  
