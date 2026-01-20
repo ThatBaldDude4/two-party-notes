@@ -1,0 +1,21 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#app-container {
+  border: 2px dotted black;
+  width: clamp(200px, 20%, 1200px);
+  min-height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.note-card {
+  border: 2px solid black;
+  width: 200px;
+}
