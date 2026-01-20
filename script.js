@@ -7,6 +7,7 @@ class Note {
         this.title = title;
         this.noteDescription = noteDes;
         this.createdAt = Date.now();
+        this.id = Date.now() + generateUniqueId(19);
     }
 }
 
@@ -22,6 +23,9 @@ function render(state) {
     }
     if (state.view === "create") {
         renderCreate()
+    }
+    if (state.view === "edit") {
+        
     }
 }
 
@@ -41,6 +45,10 @@ function renderList(notes) {
     });
 
     appDisplayContainer.innerHTML = convertedNotes;
+}
+
+function renderEdit(state) {
+
 }
 
 function renderCreate() {
@@ -71,6 +79,16 @@ function saveNote() {
     state.notes.push(note);
 }
 
+function generateUniqueId(length) {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    let randomIndex = Math.floor(Math.random() * characters.length);
+    password += characters[randomIndex];
+  }
+  return password;
+}
+
 addNoteBtn.addEventListener("click", () => {
     state.view = "create"
     render(state)
@@ -82,6 +100,6 @@ document.addEventListener("click", (e) => {
         saveNote();
         state.view = "list";
         render(state);
-        console.log(state.view)
+        console.log(state.notes)
     }
-})  
+})
