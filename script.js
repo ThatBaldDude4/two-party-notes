@@ -59,6 +59,7 @@ function renderEdit(noteId) {
         <label for="title">Title:</label>
         <input name="title" value="${title}">
         <textarea class="description">${noteDescription}</textarea>
+        <button class="back-btn">Back</button>
         <button type="submit" id="save-note-btn">Save Note</button>
     </div>
     `
@@ -73,6 +74,7 @@ function renderCreate() {
         <label for="title">Title:</label>
         <input name="title">
         <textarea class="description"></textarea>
+        <button class="back-btn">Back</button>
         <button type="submit" id="save-note-btn">Save Note</button>
     </div>
     `;
@@ -95,9 +97,6 @@ function saveNote() {
         return
     }
 
-    console.log(state.activeNoteId, "This is the current noteID")
-
-    
     let note = new Note(title, description);
     state.notes[note.id] = note;
     
@@ -116,7 +115,6 @@ function generateUniqueId(length) {
 addNoteBtn.addEventListener("click", () => {
     state.view = "create"
     render(state)
-
 });
 
 document.addEventListener("click", (e) => {
@@ -126,14 +124,19 @@ document.addEventListener("click", (e) => {
         render(state);
     }
 
-    if (!e.target.classList.contains("edit-btn")) return;
+    
+
     if (e.target.classList.contains("edit-btn")) {
+
         let noteId = e.target.dataset.noteId;
         state.activeNoteId = noteId;
-        console.log(state.notes)
-
+        
         state.view = "edit"
         render(state);
     }
     
+    if (e.target.classList.contains("back-btn")) {
+        state.view = "list";
+        render(state);
+    }
 })
