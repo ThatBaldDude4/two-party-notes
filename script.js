@@ -25,7 +25,7 @@ function render(state) {
         renderCreate()
     }
     if (state.view === "edit") {
-        
+        renderEdit(state.activeNoteId)
     }
 }
 
@@ -41,7 +41,7 @@ function renderList(notes) {
             <h2 class="note-title">${title}</h2>
             <p class="note-description">${noteDescription}</p>
             <div class="time-created">${createdAt}</div>
-            <button class="edit-btn" date-note-id="${id}">EDIT</button>
+            <button class="edit-btn" data-note-id="${id}">EDIT</button>
         </div>
         `
     });
@@ -50,15 +50,20 @@ function renderList(notes) {
 }
 
 function renderEdit(noteId) {
-    let note = state.notes.find((id) => noteId === id);
+    let note = state.notes[noteId]
     let {title, noteDescription} = note;
 
     let currentNoteForm = 
     `
     <div class="form">
-        
+        <label for="title">Title:</label>
+        <input name="title" value="${title}">
+        <textarea class="description">${noteDescription}</textarea>
+        <button type="submit" id="save-note-btn">Save Note</button>
     </div>
     `
+
+    appDisplayContainer.innerHTML = currentNoteForm;
 }
 
 function renderCreate() {
@@ -83,6 +88,16 @@ function saveNote() {
 
     if (!title || !description) {return};
 
+    if (state.view === "edit") {
+        let note = state.notes[state.activeNoteId];
+        note.title = title;
+        note.noteDescription = description;
+        return
+    }
+
+    console.log(state.activeNoteId, "This is the current noteID")
+
+    
     let note = new Note(title, description);
     state.notes[note.id] = note;
     
@@ -106,17 +121,19 @@ addNoteBtn.addEventListener("click", () => {
 
 document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "save-note-btn") {
-        console.log(e.target.class)
         saveNote();
         state.view = "list";
         render(state);
-        console.log(state.notes)
     }
 
     if (!e.target.classList.contains("edit-btn")) return;
     if (e.target.classList.contains("edit-btn")) {
         let noteId = e.target.dataset.noteId;
         state.activeNoteId = noteId;
+        console.log(state.notes)
+
+        state.view = "edit"
+        render(state);
     }
     
 })
