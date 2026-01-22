@@ -67,8 +67,7 @@ function renderCreate() {
     <div class="form">
         <label for="title">Title:</label>
         <input name="title">
-        <label for="description">Description:</label>
-        <input name="description">
+        <textarea class="description"></textarea>
         <button type="submit" id="save-note-btn">Save Note</button>
     </div>
     `;
@@ -79,7 +78,7 @@ function renderCreate() {
 function saveNote() {
     let title = document.querySelector('input[name="title"]');
     title = title.value;
-    let description = document.querySelector('input[name="description"]');
+    let description = document.querySelector('textarea[class="description"]');
     description = description.value;
 
     if (!title || !description) {return};
