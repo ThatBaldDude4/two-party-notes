@@ -42,6 +42,7 @@ function renderList(notes) {
             <p class="note-description">${noteDescription}</p>
             <div class="time-created">${createdAt}</div>
             <button class="edit-btn" data-note-id="${id}">EDIT</button>
+            <button class="delete-btn" data-note-id="${id}">DELETE</button>
         </div>
         `
     });
@@ -137,6 +138,12 @@ document.addEventListener("click", (e) => {
     
     if (e.target.classList.contains("back-btn")) {
         state.view = "list";
+        render(state);
+    }
+
+    if (e.target.classList.contains("delete-btn")) {
+        let noteId = e.target.dataset.noteId;
+        delete state.notes[noteId];
         render(state);
     }
 })
