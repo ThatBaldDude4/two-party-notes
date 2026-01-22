@@ -13,7 +13,7 @@ class Note {
 
 const state = {
     view: "list",
-    notes: [],
+    notes: {},
     activeNoteId: null,
 }
 
@@ -32,14 +32,16 @@ function render(state) {
 function renderList(notes) {
     let convertedNotes = ``;
 
-    notes.forEach(({title, noteDescription, createdAt}) => {
+    let notesArr = Object.values(notes)
+
+    notesArr.forEach(({title, noteDescription, createdAt, id}) => {
         convertedNotes += 
         `
         <div class="notes">
             <h2 class="note-title">${title}</h2>
             <p class="note-description">${noteDescription}</p>
             <div class="time-created">${createdAt}</div>
-            <button class="edit-btn">EDIT</button>
+            <button class="edit-btn" date-note-id="${id}">EDIT</button>
         </div>
         `
     });
@@ -47,8 +49,16 @@ function renderList(notes) {
     appDisplayContainer.innerHTML = convertedNotes;
 }
 
-function renderEdit(state) {
+function renderEdit(noteId) {
+    let note = state.notes.find((id) => noteId === id);
+    let {title, noteDescription} = note;
 
+    let currentNoteForm = 
+    `
+    <div class="form">
+        
+    </div>
+    `
 }
 
 function renderCreate() {
@@ -68,7 +78,6 @@ function renderCreate() {
 
 function saveNote() {
     let title = document.querySelector('input[name="title"]');
-    console.log("This is log", title)
     title = title.value;
     let description = document.querySelector('input[name="description"]');
     description = description.value;
@@ -76,7 +85,8 @@ function saveNote() {
     if (!title || !description) {return};
 
     let note = new Note(title, description);
-    state.notes.push(note);
+    state.notes[note.id] = note;
+    
 }
 
 function generateUniqueId(length) {
@@ -97,9 +107,17 @@ addNoteBtn.addEventListener("click", () => {
 
 document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "save-note-btn") {
+        console.log(e.target.class)
         saveNote();
         state.view = "list";
         render(state);
         console.log(state.notes)
     }
+
+    if (!e.target.classList.contains("edit-btn")) return;
+    if (e.target.classList.contains("edit-btn")) {
+        let noteId = e.target.dataset.noteId;
+        state.activeNoteId = noteId;
+    }
+    
 })
