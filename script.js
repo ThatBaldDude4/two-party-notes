@@ -17,6 +17,7 @@ const state = {
     activeNoteId: null,
 }
 
+
 function render(state) {
     if (state.view === "list") {
         renderList(state.notes);
@@ -122,9 +123,9 @@ function getDataFromStorage() {
     const rawData = localStorage.getItem("notes_v1");
     let notes = {};
 
-    if (raw) {
+    if (rawData) {
         try {
-            notes = JSON.parse(raw);
+            notes = JSON.parse(rawData);
         }catch {
             notes = {};
         }
@@ -141,6 +142,7 @@ document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "save-note-btn") {
         saveNote();
         state.view = "list";
+        updateLocalStorage(state.notes);
         render(state);
     }
 
@@ -150,8 +152,7 @@ document.addEventListener("click", (e) => {
 
         let noteId = e.target.dataset.noteId;
         state.activeNoteId = noteId;
-        
-        state.view = "edit"
+        state.view = "edit";
         render(state);
     }
     
@@ -163,6 +164,10 @@ document.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete-btn")) {
         let noteId = e.target.dataset.noteId;
         delete state.notes[noteId];
+        updateLocalStorage(state.notes);
         render(state);
     }
-})
+});
+
+state.notes = getDataFromStorage();
+render(state)
