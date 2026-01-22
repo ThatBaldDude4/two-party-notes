@@ -113,6 +113,25 @@ function generateUniqueId(length) {
   return password;
 }
 
+function updateLocalStorage(notes) {
+    const notesStr = JSON.stringify(notes);
+    localStorage.setItem("notes_v1", notesStr);
+}
+
+function getDataFromStorage() {
+    const rawData = localStorage.getItem("notes_v1");
+    let notes = {};
+
+    if (raw) {
+        try {
+            notes = JSON.parse(raw);
+        }catch {
+            notes = {};
+        }
+    }
+    return notes;
+}
+
 addNoteBtn.addEventListener("click", () => {
     state.view = "create"
     render(state)
