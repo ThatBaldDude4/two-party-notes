@@ -53,8 +53,15 @@ function renderList(notes) {
 
 function renderEdit(noteId) {
     let note = state.notes[noteId]
-    let {title, noteDescription} = note;
+    
+    if (!note) {
+        state.view = "list";
+        state.activeNoteId = null;
+        render(state);
+        return;
+    }
 
+    let {title, noteDescription} = note;
     let currentNoteForm = 
     `
     <div class="form">
@@ -65,7 +72,6 @@ function renderEdit(noteId) {
         <button type="submit" id="save-note-btn">Save Note</button>
     </div>
     `
-
     appDisplayContainer.innerHTML = currentNoteForm;
 }
 
@@ -142,6 +148,7 @@ document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "save-note-btn") {
         saveNote();
         state.view = "list";
+        state.activeNoteId = null;
         updateLocalStorage(state.notes);
         render(state);
     }
@@ -158,12 +165,14 @@ document.addEventListener("click", (e) => {
     
     if (e.target.classList.contains("back-btn")) {
         state.view = "list";
+        state.activeNoteId = null;
         render(state);
     }
 
     if (e.target.classList.contains("delete-btn")) {
         let noteId = e.target.dataset.noteId;
         delete state.notes[noteId];
+        state.activeNoteId = null;
         updateLocalStorage(state.notes);
         render(state);
     }
