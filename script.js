@@ -6,7 +6,7 @@ class Note {
     constructor(title, noteDes) {
         this.title = title;
         this.noteDescription = noteDes;
-        this.createdAt = Date.now();
+        this.createdAt = new Date().toString();
         this.id = Date.now() + generateUniqueId(19);
     }
 }
@@ -62,6 +62,9 @@ function renderEdit(noteId) {
     }
 
     let {title, noteDescription} = note;
+    title = escapeHTML(title);
+    noteDescription = escapeHTML(noteDescription);
+
     let currentNoteForm = 
     `
     <div class="form">
@@ -92,9 +95,9 @@ function renderCreate() {
 
 function saveNote() {
     let title = document.querySelector('input[name="title"]');
-    title = title.value;
+    title = escapeHTML(title.value);
     let description = document.querySelector('textarea[class="description"]');
-    description = description.value;
+    description = escapeHTML(description.value);
 
     if (!title || !description) {return};
 
@@ -118,6 +121,15 @@ function generateUniqueId(length) {
     password += characters[randomIndex];
   }
   return password;
+}
+
+function escapeHTML(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function updateLocalStorage(notes) {
